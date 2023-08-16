@@ -26,6 +26,7 @@ RUN curl -sSL https://dl.google.com/linux/linux_signing_key.pub | apt-key add - 
 # Install Poetry
 RUN sudo apt install wget build-essential libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev
 RUN sudo add-apt-repository ppa:deadsnakes/ppa
+RUN sudo apt update
 RUN sudo apt install python3.11
 RUN pip3 install poetry
 
@@ -34,7 +35,6 @@ RUN pip3 install poetry
 # Install Python and pip
 RUN apt-get update && \
     apt-get install -y \
-    python3 \
     python3-pip
 
 # Set the working directory
