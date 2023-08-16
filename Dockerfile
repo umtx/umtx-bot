@@ -41,10 +41,10 @@ RUN apt-get update && \
 WORKDIR /app
 
 # Copy the local code to the container
-COPY ./* /app/
+COPY . /app
 
 # Install project dependencies using Poetry
 RUN poetry install
 
 # Start your application (replace with your actual command)
-CMD ["sh", "start.sh"]
+CMD ["sh", "run.sh"]
