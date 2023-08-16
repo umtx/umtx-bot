@@ -41,7 +41,7 @@ RUN apt-get update && \
 WORKDIR /app
 
 # Copy the local code to the container
-COPY . /app
+COPY ./* /app/
 
 # Install project dependencies using Poetry
 RUN poetry install
