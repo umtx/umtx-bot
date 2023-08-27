@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 import json
 import time
+import os
 import seleniumwire.undetected_chromedriver.v2 as uc
 
 from seleniumwire import webdriver
@@ -36,7 +37,7 @@ def fill_input_xpath(driver: webdriver, xpath_value: str, value: str):
     if ((not driver.find_elements(By.XPATH, xpath_value)[0].is_displayed()) or (not driver.find_elements(By.XPATH, xpath_value)[0].is_enabled())):
         sleep_and_wait(0.1)
 
-        # WebDriverWait(driver, 10 ,ignored_exceptions=ignored_exceptions).until(expected_conditions.presence_of_element_located((By.XPATH, xpath_value)))
+        
         return fill_input_xpath(driver, xpath_value, value)
 
     else:
@@ -52,7 +53,7 @@ def click_button_xpath(driver: webdriver, xpath_value: str):
     while len(driver.find_elements(By.XPATH, xpath_value)) < 1:
         logger.warn('Wait')
         sleep_and_wait(0.1)
-    # sl
+    
     if ((not driver.find_elements(By.XPATH, xpath_value)[0].is_displayed()) or (not driver.find_elements(By.XPATH, xpath_value)[0].is_enabled())):
         sleep_and_wait(0.1)
         return click_button_xpath(driver, xpath_value)
@@ -66,7 +67,7 @@ def click_button_xpath(driver: webdriver, xpath_value: str):
 def find_exist_xpath(driver: webdriver, xpath_value: str):
     sleep_and_wait(0.1)
 
-    # sl
+    
     if len(driver.find_elements(By.XPATH, xpath_value)) < 1:
         sleep_and_wait(0.2)
 
@@ -78,10 +79,10 @@ def sleep_and_wait(seconds: int):
 
 
 def get_random_string(length):
-    # With combination of lower and upper case
+    
     result_str = ''.join(random.choice(string.ascii_letters)
                          for i in range(length))
-    # print random string
+    
     return result_str
 
 
@@ -91,35 +92,33 @@ def ping():
 
 
 def perfomance_login(user_profile):
-    chrome_options = Options()
-    chrome_options.add_argument('--ignore-certificate-errors')
-    chrome_options.add_argument("--headless")
+    # chrome_options.add_argument("--headless")
+    try:
+        
+        chrome_options = Options()
+        chrome_options.add_argument('--ignore-certificate-errors')
+        driver = uc.Chrome(options=chrome_options, seleniumwire_options={
+        # 'mitm_websocket': False,
 
-    driver = uc.Chrome(options=chrome_options, seleniumwire_options={
-        'mitm_websocket': False,
-
-        'verify_ssl': False,
-        'ssl_cert_verify': False
-    })
-    # sleep_and_wait(5)
-    #
-    # driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
-    # driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
-    #     "source":
-    #         "const newProto = navigator.__proto__;"
-    #         "delete newProto.webdriver;"
-    #         "navigator.__proto__ = newProto;"
-    # })
-    #
+            # 'verify_ssl': False,
+            # 'ssl_cert_verify': False
+        })
+        sleep_and_wait(33333)
+    except(e):
+        print('Failed to open browser')
+        print(e)
+    
+    sleep_and_wait(341213)
+    
     logger.info("Go to https://sis.umt.edu.vn/")
     driver.get('https://sis.umt.edu.vn/')
-    # sleep_and_wait(2)
+    
     click_button_xpath(driver, "//span[@class='menu-icon d-block']")
     sleep_and_wait(0.5)
     fill_input_xpath(driver, "//input[@id='i0116']", user_profile['username'])
-    # username_section = driver.find_elements(By.XPATH, "//input[@id='i0116']")
+    
 
-    # username_section[0].send_keys()
+    
     click_button_xpath(driver, '//input[@id="idSIButton9"]')
 
     is_failed = find_exist_xpath(driver, '//div[@id="usernameError"]')
@@ -129,18 +128,18 @@ def perfomance_login(user_profile):
         driver.close()
         return {"error": True, "msg": "WRONG_USERNAME"}
 
-        # return
+        
     logger.info("Input email")
-    # sleep_and_wait(3000)
+    
 
     fill_input_xpath(driver, '//input[@id="i0118"]', user_profile['password'])
 
     logger.info("Input password")
-    # sleep_and_wait(10000)
+    
     click_button_xpath(driver, '//input[@id="idSIButton9"]')
 
-    # cc =  driver.find_elements(By.XPATH, '//div[@id="passwordError"]')
-    # print(len(cc))
+    
+    
 
     logger.info("Login")
     is_failed = find_exist_xpath(driver, '//div[@id="passwordError"]')
@@ -149,9 +148,9 @@ def perfomance_login(user_profile):
         driver.close()
 
         return {"error": True, "msg": "WRONG_PASSWORD"}
-        # return
-    # sleep_and_wait(3000)
-    # print(driver)
+        
+    
+    
     click_button_xpath(driver, '//input[@id="idSIButton9"]')
 
     ignored_exceptions = (StaleElementReferenceException)
@@ -167,7 +166,7 @@ def perfomance_login(user_profile):
 
     access_token = user['token']
 
-    # logger.info("TOKEN: " + str(access_token))
+    
     if len(access_token) > 0:
         print({"token":access_token,  "suid": uid})
         return {"error": False, "token": access_token, "message": "SUCCESS", "suid": uid, 'puid': pid}
@@ -177,7 +176,7 @@ def perfomance_login(user_profile):
 
 @app.route('/login', methods=['POST'])
 def browser():
-    # print(request.args.get('username'))\
+    
     content_type = request.headers.get('Content-Type')
     if (content_type == 'application/json'):
         user_profile = request.json
@@ -189,22 +188,16 @@ def browser():
     except Exception as e:
         return {"error": True, "message": "UNKNOWN_ERROR"}
     return return_data
-    # driver.close()
-    # fetch_main(access_token, uid)
+    
+    
 
 
 if __name__ == '__main__':
-    # browser(1)
-    app.run(debug=True)
+    from waitress import serve
 
-    # app.run(host='
+    app.run(threaded=False, processes=8, host="0.0.0.0", port=os.getenv("PORT"))
 
-# def authorize():
-#     # instance of Options class allows
-#     # us to configure Headless Chrome
-#     threads = 1
-#     with futures.ThreadPoolExecutor() as executor:
-#         future_test_results = [executor.submit(browser, i)
-#                                for i in range(1, int(threads) + 1)]
-#         for future_test_result in future_test_results:
-#             test_result = future_test_result.result()
+
+
+
+

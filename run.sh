@@ -1,1 +1,1 @@
-export FLASK_ENV=development && export FLASK_APP=src/umtis/app && poetry run python -m flask run --debug
+export FLASK_ENV=production && export FLASK_APP=src/umtis/app && poetry run python -m flask run 

@@ -16,6 +16,7 @@ ics = "^0.7.2"
 python-dateutil = "^2.8.2"
 undetected-chromedriver = "^3.5.2"
 flask = "^2.3.2"
+waitress = "^2.1.2"
 
 
 [build-system]
