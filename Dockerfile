@@ -8,8 +8,11 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN  sed -i 's|http://archive.|http://vn.archive.|g' /etc/apt/sources.list
 
 RUN apt-get update
-RUN apt-get install -y gnupg
-RUN apt-get update && apt-get install -y \
+RUN apt-get install -y \
+    curl \
+    gnupg \
+    wget 
+RUN apt-get install -y \
     fonts-liberation \
     libasound2 \
     libatk-bridge2.0-0 \
@@ -34,12 +37,6 @@ RUN apt-get update && apt-get install -y \
     libvulkan1
 
 # Update and install necessary packages
-RUN apt-get update && \
-    apt-get install -y \
-    curl \
-    gnupg \
-    wget \
-    && rm -rf /var/lib/apt/lists/*
 
 # Install Google Chrome
 
