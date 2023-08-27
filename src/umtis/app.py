@@ -42,6 +42,8 @@ def fill_input_xpath(driver: webdriver, xpath_value: str, value: str):
 
     else:
         sleep_and_wait(0.1)
+        logger.info('Wait not found')
+
         driver.find_elements(By.XPATH, xpath_value)[0].send_keys(value)
 
 
@@ -56,6 +58,7 @@ def click_button_xpath(driver: webdriver, xpath_value: str):
     
     if ((not driver.find_elements(By.XPATH, xpath_value)[0].is_displayed()) or (not driver.find_elements(By.XPATH, xpath_value)[0].is_enabled())):
         sleep_and_wait(0.2)
+        logger.info('Wait not found')
         return click_button_xpath(driver, xpath_value)
 
     else:
