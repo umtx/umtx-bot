@@ -147,12 +147,15 @@ def perfomance_login(user_profile):
         
     logger.info("Password success")
 
+    driver.get_screenshot_as_file("a6.png")
     
     click_button_xpath(driver, '//input[@id="idSIButton9"]')
 
+    driver.get_screenshot_as_file("a7.png")
     ignored_exceptions = (StaleElementReferenceException)
     my_elements = WebDriverWait(driver, 10, ignored_exceptions=ignored_exceptions).until(
         expected_conditions.url_to_be("https://sis.umt.edu.vn/my-schedule"))
+    driver.get_screenshot_as_file("a8.png")
 
     logger.info("Done fetching TOKEN")
 
