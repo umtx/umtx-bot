@@ -47,7 +47,7 @@ def spawn():
         };
         xhr.send(null);
     '''
-    
+    driver.close()
     status_code = driver.execute_async_script(js)
     # print('Status ', status_code)  # 200
     if status_code in [200, 301, 302]:

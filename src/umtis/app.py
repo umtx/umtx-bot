@@ -95,12 +95,11 @@ def perfomance_login(user_profile):
     chrome_options = Options()
     chrome_options.add_argument('--ignore-certificate-errors')
     chrome_options.add_argument('--no-sandbox')
-    
+    chrome_options.add_argument('--disable-gpu')
     chrome_options.add_argument("--headless")
 
     driver = uc.Chrome(options=chrome_options, seleniumwire_options={
-    'mitm_websocket': False,
-
+    
         'verify_ssl': False,
         'ssl_cert_verify': False
     })
