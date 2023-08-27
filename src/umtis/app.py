@@ -31,7 +31,7 @@ def fill_input_xpath(driver: webdriver, xpath_value: str, value: str):
         expected_conditions.presence_of_element_located((By.XPATH, xpath_value)))
 
     while len(driver.find_elements(By.XPATH, xpath_value)) < 1:
-        logger.warn('Wait')
+        print('Wait')
 
         sleep_and_wait(0.1)
     if ((not driver.find_elements(By.XPATH, xpath_value)[0].is_displayed()) or (not driver.find_elements(By.XPATH, xpath_value)[0].is_enabled())):
@@ -51,7 +51,7 @@ def click_button_xpath(driver: webdriver, xpath_value: str):
     my_elements = WebDriverWait(driver, 10, ignored_exceptions=ignored_exceptions).until(
         expected_conditions.element_to_be_clickable((By.XPATH, xpath_value)))
     while len(driver.find_elements(By.XPATH, xpath_value)) < 1:
-        logger.warn('Wait')
+        print('Wait')
         sleep_and_wait(0.1)
     
     if ((not driver.find_elements(By.XPATH, xpath_value)[0].is_displayed()) or (not driver.find_elements(By.XPATH, xpath_value)[0].is_enabled())):
@@ -104,7 +104,7 @@ def perfomance_login(user_profile):
         'verify_ssl': False,
         'ssl_cert_verify': False
     })
-    logger.info("Go to https://sis.umt.edu.vn/")
+    print("Go to https://sis.umt.edu.vn/")
     driver.get('https://sis.umt.edu.vn/')
     
     click_button_xpath(driver, "//span[@class='menu-icon d-block']")
@@ -123,19 +123,19 @@ def perfomance_login(user_profile):
         return {"error": True, "msg": "WRONG_USERNAME"}
 
         
-    logger.info("Input email")
+    print("Input email")
     
 
     fill_input_xpath(driver, '//input[@id="i0118"]', user_profile['password'])
 
-    logger.info("Input password")
+    print("Input password")
     
     click_button_xpath(driver, '//input[@id="idSIButton9"]')
 
     
     
 
-    logger.info("Login")
+    print("Login")
     is_failed = find_exist_xpath(driver, '//div[@id="passwordError"]')
     if is_failed > 0:
         logger.error("Login failed: Wrong password")
@@ -151,7 +151,7 @@ def perfomance_login(user_profile):
     my_elements = WebDriverWait(driver, 10, ignored_exceptions=ignored_exceptions).until(
         expected_conditions.url_to_be("https://sis.umt.edu.vn/my-schedule"))
 
-    logger.info("Done fetching TOKEN")
+    print("Done fetching TOKEN")
 
     lcs = LocalStorage(driver)
     user = json.loads(lcs.get("sis-auth-react"))
@@ -189,7 +189,40 @@ def browser():
 
 
 if __name__ == '__main__':
-    from waitress import serve
+    chrome_options = Options()
+    chrome_options.add_argument('--ignore-certificate-errors')
+    chrome_options.add_argument('--no-sandbox')
+    chrome_options.add_argument('--headless')
+    print('Testing')
+    driver = uc.Chrome( options=chrome_options, seleniumwire_options={
+        'mitm_websocket': False,
+
+        'verify_ssl': False,
+        'ssl_cert_verify': False
+    })
+    driver.get("https://www.google.com/")
+    js = '''
+        let callback = arguments[0];
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', 'https://www.google.com/', true);
+        xhr.onload = function () {
+            if (this.readyState === 4) {
+                callback(this.status);
+            }
+        };
+        xhr.onerror = function (err) {
+            console.log(err);
+            callback('error');
+        };
+        xhr.send(null);
+    '''
+    
+    status_code = driver.execute_async_script(js)
+    # print('Status ', status_code)  # 200
+    if status_code in [200, 301, 302]:
+        print("Seleium OK")
+    else:
+        raise Exception("Selenium failed")
 
     app.run(threaded=False, processes=8, host="0.0.0.0", port=os.getenv("PORT"))
 

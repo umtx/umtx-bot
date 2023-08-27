@@ -23,7 +23,8 @@ def spawn():
     chrome_options = Options()
     chrome_options.add_argument('--ignore-certificate-errors')
     chrome_options.add_argument('--no-sandbox')
-
+    chrome_options.add_argument('--headless')
+    print('Testing')
     driver = uc.Chrome( options=chrome_options, seleniumwire_options={
         'mitm_websocket': False,
 
@@ -50,7 +51,7 @@ def spawn():
     status_code = driver.execute_async_script(js)
     # print('Status ', status_code)  # 200
     if status_code in [200, 301, 302]:
-        logger.info("Seleium OK")
+        print("Seleium OK")
     else:
         raise Exception("Selenium failed")
     
