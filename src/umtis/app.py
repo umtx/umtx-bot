@@ -170,13 +170,15 @@ def perfomance_login(user_profile):
 
 @app.route('/login', methods=['POST'])
 def browser():
-    
     content_type = request.headers.get('Content-Type')
     if (content_type == 'application/json'):
         user_profile = request.json
     else:
         user_profile = {username: request.args.get(
             "username"), password: request.args.get("password")}
+        
+    print('New request from ' + user_profile['username'])
+
     try:
         return_data = perfomance_login(user_profile)
     except Exception as e:
