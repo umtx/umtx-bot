@@ -182,6 +182,7 @@ def browser():
     try:
         return_data = perfomance_login(user_profile)
     except Exception as e:
+        print(e)
         return {"error": True, "message": "UNKNOWN_ERROR"}
     return return_data
     
