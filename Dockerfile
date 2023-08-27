@@ -4,7 +4,6 @@ FROM ubuntu:latest
 # Set environment variables to avoid interactive prompts during installation
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get install -y curl
 
 RUN apt-get install -y gnupg
 RUN apt-get update && apt-get install -y \
