@@ -27,7 +27,7 @@ app = Flask(__name__)
 def fill_input_xpath(driver: webdriver, xpath_value: str, value: str):
     sleep_and_wait(0.1)
     ignored_exceptions = (StaleElementReferenceException)
-    my_elements = WebDriverWait(driver, 10, ignored_exceptions=ignored_exceptions).until(
+    my_elements = WebDriverWait(driver, 5, ignored_exceptions=ignored_exceptions).until(
         expected_conditions.presence_of_element_located((By.XPATH, xpath_value)))
 
     while len(driver.find_elements(By.XPATH, xpath_value)) < 1:
@@ -50,7 +50,7 @@ def fill_input_xpath(driver: webdriver, xpath_value: str, value: str):
 def click_button_xpath(driver: webdriver, xpath_value: str):
     sleep_and_wait(0.2)
     ignored_exceptions = (StaleElementReferenceException)
-    my_elements = WebDriverWait(driver, 10, ignored_exceptions=ignored_exceptions).until(
+    my_elements = WebDriverWait(driver, 5, ignored_exceptions=ignored_exceptions).until(
         expected_conditions.element_to_be_clickable((By.XPATH, xpath_value)))
     while len(driver.find_elements(By.XPATH, xpath_value)) < 1:
         logger.info('Wait')
@@ -98,7 +98,7 @@ def perfomance_login(user_profile):
     chrome_options = Options()
     chrome_options.add_argument('--disable-dev-shm-usage')        
 
-    chrome_options.add_argument('--headless')
+    # chrome_options.add_argument('--headless')
     logger.info('Fire up')
     driver = uc.Chrome( options=chrome_options, seleniumwire_options={
 
@@ -153,6 +153,7 @@ def perfomance_login(user_profile):
     driver.get_screenshot_as_file("a6.png")
     
     click_button_xpath(driver, '//input[@id="idSIButton9"]')
+    logger.info("Click success")
 
     driver.get_screenshot_as_file("a7.png")
     ignored_exceptions = (StaleElementReferenceException)
@@ -203,7 +204,6 @@ if __name__ == '__main__':
     chrome_options = Options()
     chrome_options.add_argument('--disable-dev-shm-usage')        
 
-    chrome_options.add_argument('--headless')
     logger.info('Testing')
     driver = uc.Chrome( options=chrome_options, seleniumwire_options={
 
@@ -229,6 +229,7 @@ if __name__ == '__main__':
     
     status_code = driver.execute_async_script(js)
     # logger.info('Status ', status_code)  # 200
+    
     if status_code in [200, 301, 302]:
         logger.info("Seleium OK")
     else:
