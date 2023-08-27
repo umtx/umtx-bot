@@ -93,23 +93,16 @@ def ping():
 
 def perfomance_login(user_profile):
     # chrome_options.add_argument("--headless")
-    try:
-        
-        chrome_options = Options()
-        chrome_options.add_argument('--ignore-certificate-errors')
-        driver = uc.Chrome(options=chrome_options, seleniumwire_options={
-        # 'mitm_websocket': False,
+    chrome_options = Options()
+    chrome_options.add_argument('--ignore-certificate-errors')
+    chrome_options.add_argument('--no-sandbox')
 
-            # 'verify_ssl': False,
-            # 'ssl_cert_verify': False
-        })
-        sleep_and_wait(33333)
-    except(e):
-        print('Failed to open browser')
-        print(e)
-    
-    sleep_and_wait(341213)
-    
+    driver = uc.Chrome(options=chrome_options, seleniumwire_options={
+    'mitm_websocket': False,
+
+        'verify_ssl': False,
+        'ssl_cert_verify': False
+    })
     logger.info("Go to https://sis.umt.edu.vn/")
     driver.get('https://sis.umt.edu.vn/')
     
