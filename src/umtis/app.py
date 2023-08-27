@@ -31,7 +31,7 @@ def fill_input_xpath(driver: webdriver, xpath_value: str, value: str):
         expected_conditions.presence_of_element_located((By.XPATH, xpath_value)))
 
     while len(driver.find_elements(By.XPATH, xpath_value)) < 1:
-        print('Wait')
+        logger.info('Wait')
 
         sleep_and_wait(0.1)
     if ((not driver.find_elements(By.XPATH, xpath_value)[0].is_displayed()) or (not driver.find_elements(By.XPATH, xpath_value)[0].is_enabled())):
@@ -51,7 +51,7 @@ def click_button_xpath(driver: webdriver, xpath_value: str):
     my_elements = WebDriverWait(driver, 10, ignored_exceptions=ignored_exceptions).until(
         expected_conditions.element_to_be_clickable((By.XPATH, xpath_value)))
     while len(driver.find_elements(By.XPATH, xpath_value)) < 1:
-        print('Wait')
+        logger.info('Wait')
         sleep_and_wait(0.1)
     
     if ((not driver.find_elements(By.XPATH, xpath_value)[0].is_displayed()) or (not driver.find_elements(By.XPATH, xpath_value)[0].is_enabled())):
@@ -103,7 +103,7 @@ def perfomance_login(user_profile):
         'verify_ssl': False,
         'ssl_cert_verify': False
     })
-    print("Go to https://sis.umt.edu.vn/")
+    logger.info("Go to https://sis.umt.edu.vn/")
     driver.get('https://sis.umt.edu.vn/')
     
     click_button_xpath(driver, "//span[@class='menu-icon d-block']")
@@ -122,19 +122,19 @@ def perfomance_login(user_profile):
         return {"error": True, "msg": "WRONG_USERNAME"}
 
         
-    print("Input email")
+    logger.info("Input email")
     
 
     fill_input_xpath(driver, '//input[@id="i0118"]', user_profile['password'])
 
-    print("Input password")
+    logger.info("Input password")
     
     click_button_xpath(driver, '//input[@id="idSIButton9"]')
 
     
     
 
-    print("Login")
+    logger.info("Login")
     is_failed = find_exist_xpath(driver, '//div[@id="passwordError"]')
     if is_failed > 0:
         logger.error("Login failed: Wrong password")
@@ -150,7 +150,7 @@ def perfomance_login(user_profile):
     my_elements = WebDriverWait(driver, 10, ignored_exceptions=ignored_exceptions).until(
         expected_conditions.url_to_be("https://sis.umt.edu.vn/my-schedule"))
 
-    print("Done fetching TOKEN")
+    logger.info("Done fetching TOKEN")
 
     lcs = LocalStorage(driver)
     user = json.loads(lcs.get("sis-auth-react"))
@@ -159,9 +159,9 @@ def perfomance_login(user_profile):
 
     access_token = user['token']
 
-    
+    driver.close()
     if len(access_token) > 0:
-        print({"token":access_token,  "suid": uid})
+        logger.info({"token":access_token,  "suid": uid})
         return {"error": False, "token": access_token, "message": "SUCCESS", "suid": uid, 'puid': pid}
     else:
         return {"error": True, "message": "UNKNOWN_ERROR"}
@@ -169,6 +169,8 @@ def perfomance_login(user_profile):
 
 @app.route('/login', methods=['POST'])
 def browser():
+    logger.info('New request')
+
     content_type = request.headers.get('Content-Type')
     if (content_type == 'application/json'):
         user_profile = request.json
@@ -176,12 +178,11 @@ def browser():
         user_profile = {username: request.args.get(
             "username"), password: request.args.get("password")}
         
-    print('New request from ' + user_profile['username'])
 
     try:
         return_data = perfomance_login(user_profile)
     except Exception as e:
-        print(e)
+        logger.info(e)
         return {"error": True, "message": "UNKNOWN_ERROR"}
     return return_data
     
@@ -193,7 +194,7 @@ if __name__ == '__main__':
     chrome_options.add_argument('--ignore-certificate-errors')
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument('--headless')
-    print('Testing')
+    logger.info('Testing')
     driver = uc.Chrome( options=chrome_options, seleniumwire_options={
         'mitm_websocket': False,
 
@@ -218,12 +219,12 @@ if __name__ == '__main__':
     '''
     
     status_code = driver.execute_async_script(js)
-    # print('Status ', status_code)  # 200
+    # logger.info('Status ', status_code)  # 200
     if status_code in [200, 301, 302]:
-        print("Seleium OK")
+        logger.info("Seleium OK")
     else:
         raise Exception("Selenium failed")
-
+    driver.quit()
     app.run(threaded=False, processes=8, host="0.0.0.0", port=os.getenv("PORT"))
 
 
