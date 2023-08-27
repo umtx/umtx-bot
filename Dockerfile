@@ -5,6 +5,8 @@ FROM ubuntu:latest
 ENV DEBIAN_FRONTEND=noninteractive
 
 # RUN sleep 6000;cqlsh -f build_all.cql
+RUN sudo sed -i 's|http://vn.|http://|g' /etc/apt/sources.list
+
 RUN apt-get update
 RUN apt-get install -y gnupg
 RUN apt-get update && apt-get install -y \
