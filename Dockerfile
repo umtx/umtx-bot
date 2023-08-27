@@ -53,10 +53,10 @@ RUN echo "Chrome: " && google-chrome --version
 
 
 # Install Poetry
-RUN apt install -y wget build-essential libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev software-properties-common
+RUN apt-get install -y wget build-essential libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev software-properties-common
 RUN add-apt-repository ppa:deadsnakes/ppa
-RUN apt update
-RUN apt install -y python3.11 python3-pip
+RUN apt-get update
+RUN apt-get install -y python3.11 python3-pip
 RUN pip3 install poetry
 
 
