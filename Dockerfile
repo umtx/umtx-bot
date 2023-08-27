@@ -15,10 +15,10 @@ RUN apt-get update && \
 # Install Google Chrome
 
 RUN curl -LO  https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_114.0.5735.90-1_amd64.deb
-RUN apt-get install -y ./google-chrome-stable_current_amd64.deb
+RUN apt-get install -y ./google-chrome-stable_114.0.5735.90-1_amd64.deb
 
 # RUN sleep 6000;cqlsh -f build_all.cql
-RUN rm google-chrome-stable_current_amd64.deb
+RUN rm google-chrome-stable_114.0.5735.90-1_amd64.deb
 
 RUN echo "Chrome: " && google-chrome --version
 
