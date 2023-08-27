@@ -93,13 +93,12 @@ def ping():
 
 def perfomance_login(user_profile):
     chrome_options = Options()
-    chrome_options.add_argument('--ignore-certificate-errors')
-    chrome_options.add_argument('--no-sandbox')
-    chrome_options.add_argument('--disable-gpu')
-    chrome_options.add_argument("--headless")
+    chrome_options.add_argument('--disable-dev-shm-usage')        
 
-    driver = uc.Chrome(options=chrome_options, seleniumwire_options={
-    
+    chrome_options.add_argument('--headless')
+    logger.info('Fire up')
+    driver = uc.Chrome( options=chrome_options, seleniumwire_options={
+
         'verify_ssl': False,
         'ssl_cert_verify': False
     })
@@ -191,12 +190,11 @@ def browser():
 
 if __name__ == '__main__':
     chrome_options = Options()
-    chrome_options.add_argument('--ignore-certificate-errors')
-    chrome_options.add_argument('--no-sandbox')
+    chrome_options.add_argument('--disable-dev-shm-usage')        
+
     chrome_options.add_argument('--headless')
     logger.info('Testing')
     driver = uc.Chrome( options=chrome_options, seleniumwire_options={
-        'mitm_websocket': False,
 
         'verify_ssl': False,
         'ssl_cert_verify': False
@@ -224,7 +222,7 @@ if __name__ == '__main__':
         logger.info("Seleium OK")
     else:
         raise Exception("Selenium failed")
-    driver.quit()
+    driver.close()
     app.run(threaded=False, processes=8, host="0.0.0.0", port=os.getenv("PORT"))
 
 
