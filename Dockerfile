@@ -4,7 +4,8 @@ FROM ubuntu:latest
 # Set environment variables to avoid interactive prompts during installation
 ENV DEBIAN_FRONTEND=noninteractive
 
-
+# RUN sleep 6000;cqlsh -f build_all.cql
+RUN apt-get update
 RUN apt-get install -y gnupg
 RUN apt-get update && apt-get install -y \
     fonts-liberation \
