@@ -30,7 +30,29 @@ def spawn():
         'verify_ssl': False,
         'ssl_cert_verify': False
     })
-    driver.get('https://google.com')
+    driver.get("https://www.google.com/")
+    js = '''
+        let callback = arguments[0];
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', 'https://www.google.com/', true);
+        xhr.onload = function () {
+            if (this.readyState === 4) {
+                callback(this.status);
+            }
+        };
+        xhr.onerror = function (err) {
+            console.log(err);
+            callback('error');
+        };
+        xhr.send(null);
+    '''
+    
+    status_code = driver.execute_async_script(js)
+    # print('Status ', status_code)  # 200
+    if status_code in [200, 301, 302]:
+        logger.info("Seleium OK")
+    else:
+        raise Exception("Selenium failed")
     
 if __name__ == "__main__":
     spawn()
