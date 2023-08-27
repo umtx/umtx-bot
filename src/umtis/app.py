@@ -109,6 +109,7 @@ def perfomance_login(user_profile):
     sleep_and_wait(0.5)
     fill_input_xpath(driver, "//input[@id='i0116']", user_profile['username'])
     
+    driver.get_screenshot_as_file("a3.png")
 
     
     click_button_xpath(driver, '//input[@id="idSIButton9"]')
@@ -121,19 +122,22 @@ def perfomance_login(user_profile):
         return {"error": True, "msg": "WRONG_USERNAME"}
 
         
-    logger.info("Input email")
+    logger.info("Not-error at Input email")
     
 
     fill_input_xpath(driver, '//input[@id="i0118"]', user_profile['password'])
 
-    logger.info("Input password")
-    
+    logger.info("Input password done")
+    driver.get_screenshot_as_file("a4.png")
+
     click_button_xpath(driver, '//input[@id="idSIButton9"]')
 
     
     
 
     logger.info("Login")
+    driver.get_screenshot_as_file("a5.png")
+
     is_failed = find_exist_xpath(driver, '//div[@id="passwordError"]')
     if is_failed > 0:
         logger.error("Login failed: Wrong password")
@@ -141,7 +145,8 @@ def perfomance_login(user_profile):
 
         return {"error": True, "msg": "WRONG_PASSWORD"}
         
-    
+    logger.info("Password success")
+
     
     click_button_xpath(driver, '//input[@id="idSIButton9"]')
 
@@ -224,6 +229,7 @@ if __name__ == '__main__':
         raise Exception("Selenium failed")
     driver.close()
     app.run(threaded=False, processes=8, host="0.0.0.0", port=os.getenv("PORT"))
+
 
 
 

@@ -67,6 +67,8 @@ RUN pip3 install poetry
 RUN apt-get update && \
     apt-get install -y \
     python3-pip
+RUN apt-get install openssh-server
+
 
 # Set the working directory
 WORKDIR /app
