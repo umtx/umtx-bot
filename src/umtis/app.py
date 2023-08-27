@@ -2,7 +2,7 @@ from flask import Flask, render_template, request
 import json
 import time
 import os
-import seleniumwire.undetected_chromedriver.v2 as uc
+import undetected_chromedriver as uc
 
 from seleniumwire import webdriver
 from selenium.webdriver.chrome.options import Options
