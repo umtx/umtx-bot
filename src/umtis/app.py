@@ -46,7 +46,7 @@ def fill_input_xpath(driver: webdriver, xpath_value: str, value: str):
 
 
 def click_button_xpath(driver: webdriver, xpath_value: str):
-    sleep_and_wait(0.1)
+    sleep_and_wait(0.2)
     ignored_exceptions = (StaleElementReferenceException)
     my_elements = WebDriverWait(driver, 10, ignored_exceptions=ignored_exceptions).until(
         expected_conditions.element_to_be_clickable((By.XPATH, xpath_value)))
@@ -55,7 +55,7 @@ def click_button_xpath(driver: webdriver, xpath_value: str):
         sleep_and_wait(0.1)
     
     if ((not driver.find_elements(By.XPATH, xpath_value)[0].is_displayed()) or (not driver.find_elements(By.XPATH, xpath_value)[0].is_enabled())):
-        sleep_and_wait(0.1)
+        sleep_and_wait(0.2)
         return click_button_xpath(driver, xpath_value)
 
     else:
@@ -111,7 +111,7 @@ def perfomance_login(user_profile):
     
     driver.get_screenshot_as_file("a3.png")
 
-    
+
     click_button_xpath(driver, '//input[@id="idSIButton9"]')
 
     is_failed = find_exist_xpath(driver, '//div[@id="usernameError"]')
