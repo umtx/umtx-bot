@@ -68,7 +68,6 @@ def perfomance_login(user_profile, id):
     prefs = {"profile.password_manager_enabled": False, "credentials_enable_service": False, "useAutomationExtension": False}
     options.add_experimental_option("prefs", prefs)
     options.add_argument('-no-first-run')
-    options.add_argument('-force-color-profile=srgb')
     options.add_argument('-metrics-recording-only')
     options.add_argument('-password-store=basic')
     options.add_argument('-use-mock-keychain')
@@ -87,6 +86,8 @@ def perfomance_login(user_profile, id):
     options.add_argument('--ignore-ssl-errors=yes')
     options.add_argument('--ignore-certificate-errors')
     options.add_argument("--clear-data")
+    options.add_argument("--incognito")
+
     options.add_argument("--disable-blink-features=AutomationControlled")
 
     logger.info(f"[{id}] Fire up")
@@ -209,15 +210,14 @@ if __name__ == '__main__':
     options.add_argument('-enable-features=NetworkService,NetworkServiceInProcess,LoadCryptoTokenExtension,PermuteTLSExtensions')
     options.add_argument('-disable-features=FlashDeprecationWarning,EnablePasswordsAccountStorage')
     options.add_argument('-deny-permission-prompts')
-    options.add_argument('--disable-gpu')
-    options.add_argument('--disable-dev-shm-usage')
-    options.add_argument('--no-sandbox')
     options.add_argument("--disable-popup-blocking")
     options.add_argument("--disable-notifications")
     options.add_argument("--disable-popup-blocking")
     options.add_argument('--ignore-ssl-errors=yes')
     options.add_argument('--ignore-certificate-errors')
     options.add_argument("--clear-data")
+    
+    options.add_argument("--incognito")
     options.add_argument("--disable-blink-features=AutomationControlled")
 
 
