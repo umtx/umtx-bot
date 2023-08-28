@@ -25,39 +25,39 @@ logger = log.setup_logging("SIS")
 app = Flask(__name__)
 
 
-def fill_input_xpath(driver: webdriver, xpath_value: str, value: str):
-    sleep_and_wait(0.1)
+def fill_input_xpath(driver: webdriver, xpath_value: str, value: str, id=-1):
+    sleep_and_wait(0.2)
     while len(driver.find_elements(By.XPATH, xpath_value)) < 1:
-        logger.info('Wait')
+        logger.info(f'[{id}] Wait')
 
-        sleep_and_wait(0.1)
+        sleep_and_wait(0.2)
     if ((not driver.find_elements(By.XPATH, xpath_value)[0].is_displayed()) or (not driver.find_elements(By.XPATH, xpath_value)[0].is_enabled())):
-        sleep_and_wait(0.1)
+        sleep_and_wait(0.2)
+        logger.info(f"[{id}] Founded! Fill on")
 
-        
         return fill_input_xpath(driver, xpath_value, value)
 
     else:
         sleep_and_wait(0.1)
-        logger.info('Wait not found')
+        logger.info(f'[{id}] Wait not found')
 
         driver.find_elements(By.XPATH, xpath_value)[0].send_keys(value)
 
 
-def click_button_xpath(driver: webdriver, xpath_value: str):
+def click_button_xpath(driver: webdriver, xpath_value: str, id=-1):
     sleep_and_wait(0.2)
     while len(driver.find_elements(By.XPATH, xpath_value)) < 1:
-        logger.info('Wait')
-        sleep_and_wait(0.1)
+        logger.info(f'[{id}] Wait')
+        sleep_and_wait(0.2)
     
     if ((not driver.find_elements(By.XPATH, xpath_value)[0].is_displayed()) or (not driver.find_elements(By.XPATH, xpath_value)[0].is_enabled())):
         sleep_and_wait(0.2)
-        logger.info('Wait not found')
+        logger.info(f'[{id}] Wait not found')
         return click_button_xpath(driver, xpath_value)
 
     else:
-        sleep_and_wait(0.1)
-
+        sleep_and_wait(0.2)
+        logger.info(f"[{id}] Founded click on")
         driver.find_elements(By.XPATH, xpath_value)[0].click()
 
 
@@ -91,7 +91,7 @@ def ping():
 def perfomance_login(user_profile, id):
     chrome_options = Options()
     chrome_options.add_argument('--disable-dev-shm-usage')        
-    chrome_options.add_argument('--remote-debugging-port=4444')
+    chrome_options.add_argument('--remote-debugging-port=9229')
 
     chrome_options.add_argument('--headless')
     logger.info(f"[{id}] Fire up")
@@ -103,14 +103,14 @@ def perfomance_login(user_profile, id):
     logger.info(f"[{id}] Go to https://sis.umt.edu.vn/")
     driver.get('https://sis.umt.edu.vn/')
     
-    click_button_xpath(driver, "//span[@class='menu-icon d-block']")
+    click_button_xpath(driver, "//span[@class='menu-icon d-block']", id)
     sleep_and_wait(0.3)
     fill_input_xpath(driver, "//input[@id='i0116']", user_profile['username'])
     
     # driver.get_screenshot_as_file("a3.png")
 
 
-    click_button_xpath(driver, '//input[@id="idSIButton9"]')
+    click_button_xpath(driver, '//input[@id="idSIButton9"]', id)
 
     is_failed = find_exist_xpath(driver, '//div[@id="usernameError"]')
     if is_failed > 0:
@@ -128,7 +128,7 @@ def perfomance_login(user_profile, id):
     logger.info(f"[{id}] Input password done")
     # driver.get_screenshot_as_file("a4.png")
 
-    click_button_xpath(driver, '//input[@id="idSIButton9"]')
+    click_button_xpath(driver, '//input[@id="idSIButton9"]', id)
 
     
     
@@ -146,7 +146,7 @@ def perfomance_login(user_profile, id):
 
     sleep_and_wait(0.5)
     
-    click_button_xpath(driver, '//input[@id="idSIButton9"]')
+    click_button_xpath(driver, '//input[@id="idSIButton9"]', id)
     logger.info(f"[{id}] Click success")
 
     ignored_exceptions = (StaleElementReferenceException)
@@ -197,7 +197,6 @@ if __name__ == '__main__':
     logger.info('Testing')
     chrome_options = Options()
     chrome_options.add_argument('--disable-dev-shm-usage')        
-    chrome_options.add_argument('--remote-debugging-port=4444')
 
     chrome_options.add_argument('--headless')
     logger.info('Fire up')
