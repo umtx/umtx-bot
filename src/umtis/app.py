@@ -2,6 +2,7 @@ from flask import Flask, render_template, request
 import json
 import time
 import os
+import random
 import undetected_chromedriver as uc
 
 from seleniumwire import webdriver
@@ -26,10 +27,6 @@ app = Flask(__name__)
 
 def fill_input_xpath(driver: webdriver, xpath_value: str, value: str):
     sleep_and_wait(0.1)
-    ignored_exceptions = (StaleElementReferenceException)
-    my_elements = WebDriverWait(driver, 5, ignored_exceptions=ignored_exceptions).until(
-        expected_conditions.presence_of_element_located((By.XPATH, xpath_value)))
-
     while len(driver.find_elements(By.XPATH, xpath_value)) < 1:
         logger.info('Wait')
 
@@ -49,9 +46,6 @@ def fill_input_xpath(driver: webdriver, xpath_value: str, value: str):
 
 def click_button_xpath(driver: webdriver, xpath_value: str):
     sleep_and_wait(0.2)
-    ignored_exceptions = (StaleElementReferenceException)
-    my_elements = WebDriverWait(driver, 5, ignored_exceptions=ignored_exceptions).until(
-        expected_conditions.element_to_be_clickable((By.XPATH, xpath_value)))
     while len(driver.find_elements(By.XPATH, xpath_value)) < 1:
         logger.info('Wait')
         sleep_and_wait(0.1)
@@ -94,75 +88,72 @@ def ping():
     return 'pong'
 
 
-def perfomance_login(user_profile):
+def perfomance_login(user_profile, id):
     chrome_options = Options()
     chrome_options.add_argument('--disable-dev-shm-usage')        
     chrome_options.add_argument('--remote-debugging-port=4444')
 
     chrome_options.add_argument('--headless')
-    logger.info('Fire up')
+    logger.info(f"[{id}] Fire up")
     driver = uc.Chrome(options=chrome_options, seleniumwire_options={
 
         'verify_ssl': False,
         'ssl_cert_verify': False
     })
-    logger.info("Go to https://sis.umt.edu.vn/")
+    logger.info(f"[{id}] Go to https://sis.umt.edu.vn/")
     driver.get('https://sis.umt.edu.vn/')
     
     click_button_xpath(driver, "//span[@class='menu-icon d-block']")
-    sleep_and_wait(0.5)
+    sleep_and_wait(0.3)
     fill_input_xpath(driver, "//input[@id='i0116']", user_profile['username'])
     
-    driver.get_screenshot_as_file("a3.png")
+    # driver.get_screenshot_as_file("a3.png")
 
 
     click_button_xpath(driver, '//input[@id="idSIButton9"]')
 
     is_failed = find_exist_xpath(driver, '//div[@id="usernameError"]')
     if is_failed > 0:
-        logger.error("Login failed: Wrong Username")
+        logger.error(f"[{id}] Login failed: Wrong Username")
 
         driver.close()
         return {"error": True, "msg": "WRONG_USERNAME"}
 
         
-    logger.info("Not-error at Input email")
+    logger.info(f"[{id}] Not-error at Input email")
     
 
     fill_input_xpath(driver, '//input[@id="i0118"]', user_profile['password'])
 
-    logger.info("Input password done")
-    driver.get_screenshot_as_file("a4.png")
+    logger.info(f"[{id}] Input password done")
+    # driver.get_screenshot_as_file("a4.png")
 
     click_button_xpath(driver, '//input[@id="idSIButton9"]')
 
     
     
 
-    logger.info("Login")
-    driver.get_screenshot_as_file("a5.png")
+    logger.info(f"[{id}] Login")
 
     is_failed = find_exist_xpath(driver, '//div[@id="passwordError"]')
     if is_failed > 0:
-        logger.error("Login failed: Wrong password")
+        logger.error(f"[{id}] Login failed: Wrong password")
         driver.close()
 
         return {"error": True, "msg": "WRONG_PASSWORD"}
         
-    logger.info("Password success")
+    logger.info(f"[{id}] Password success")
 
-    driver.get_screenshot_as_file("a6.png")
+    sleep_and_wait(0.5)
     
     click_button_xpath(driver, '//input[@id="idSIButton9"]')
-    logger.info("Click success")
+    logger.info(f"[{id}] Click success")
 
-    driver.get_screenshot_as_file("a7.png")
     ignored_exceptions = (StaleElementReferenceException)
     my_elements = WebDriverWait(driver, 10, ignored_exceptions=ignored_exceptions).until(
         expected_conditions.url_to_be("https://sis.umt.edu.vn/my-schedule"))
-    driver.get_screenshot_as_file("a8.png")
-
-    logger.info("Done fetching TOKEN")
+    
+    logger.info(f"[{id}] Done fetching TOKEN")
 
     lcs = LocalStorage(driver)
     user = json.loads(lcs.get("sis-auth-react"))
@@ -173,7 +164,6 @@ def perfomance_login(user_profile):
 
     driver.close()
     if len(access_token) > 0:
-        logger.info({"token":access_token,  "suid": uid})
         return {"error": False, "token": access_token, "message": "SUCCESS", "suid": uid, 'puid': pid}
     else:
         return {"error": True, "message": "UNKNOWN_ERROR"}
@@ -181,7 +171,8 @@ def perfomance_login(user_profile):
 
 @app.route('/login', methods=['POST'])
 def browser():
-    logger.info('New request')
+    nid = random.randint(1000000, 9999999)
+    logger.info(f'[{nid}] New request')
 
     content_type = request.headers.get('Content-Type')
     if (content_type == 'application/json'):
@@ -192,7 +183,7 @@ def browser():
         
 
     try:
-        return_data = perfomance_login(user_profile)
+        return_data = perfomance_login(user_profile, nid)
     except Exception as e:
         logger.info(e)
         return {"error": True, "message": "UNKNOWN_ERROR"}
@@ -216,11 +207,11 @@ if __name__ == '__main__':
         'verify_ssl': False,
         'ssl_cert_verify': False
     })
-    driver.get("https://www.google.com/")
+    driver.get("https://www.google.com.vn/")
     js = '''
         let callback = arguments[0];
         let xhr = new XMLHttpRequest();
-        xhr.open('GET', 'https://www.google.com/', true);
+        xhr.open('GET', 'https://www.google.com.vn/', true);
         xhr.onload = function () {
             if (this.readyState === 4) {
                 callback(this.status);
