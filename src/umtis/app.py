@@ -71,12 +71,9 @@ def perfomance_login(user_profile, id):
     prefs = {"profile.password_manager_enabled": False, "credentials_enable_service": False, "useAutomationExtension": False}
     options.add_experimental_option("prefs", prefs)
     options.add_argument('-no-first-run')
-    options.add_argument('-metrics-recording-only')
     options.add_argument('-password-store=basic')
     options.add_argument('-use-mock-keychain')
-    options.add_argument('-export-tagged-pdf')
     options.add_argument('-no-default-browser-check')
-    options.add_argument('-disable-background-mode')
     options.add_argument('-enable-features=NetworkService,NetworkServiceInProcess,LoadCryptoTokenExtension,PermuteTLSExtensions')
     options.add_argument('-disable-features=FlashDeprecationWarning,EnablePasswordsAccountStorage')
     options.add_argument('-deny-permission-prompts')
@@ -95,7 +92,7 @@ def perfomance_login(user_profile, id):
 
     options.page_load_strategy = "none"
     logger.info(f"[{id}] Fire up")
-    driver = uc.Chrome(options=options, headless=False, seleniumwire_options={
+    driver = uc.Chrome(options=options, headless=True, seleniumwire_options={
 
         'verify_ssl': False,
         'ssl_cert_verify': False
