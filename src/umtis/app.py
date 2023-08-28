@@ -97,8 +97,7 @@ def perfomance_login(user_profile, id):
         'ssl_cert_verify': False
     })
     logger.info(f"[{id}] Go to https://sis.umt.edu.vn/")
-    driver.get("https://login.live.com/")
-    driver.get("https://reddit.com/")
+    driver.get("https://office.com/login")
     driver.get('https://sis.umt.edu.vn/')
     
     click_button_xpath(driver, "//span[@class='menu-icon d-block']", id)
@@ -141,19 +140,21 @@ def perfomance_login(user_profile, id):
         return {"error": True, "msg": "WRONG_PASSWORD"}
         
     logger.info(f"[{id}] Password success")
-    driver.get_screenshot_as_file(f"out/{id}-cs.png")
+    driver.get_screenshot_as_file(f"out/{id}-c1.png")
 
     sleep_and_wait(0.5)
     driver.get_screenshot_as_file(f"out/{id}-c3.png")
 
     click_button_xpath(driver, '//input[@id="idSIButton9"]', id)
     logger.info(f"[{id}] Click success")
+    driver.get_screenshot_as_file(f"out/{id}-c5.png")
 
     ignored_exceptions = (StaleElementReferenceException)
     my_elements = WebDriverWait(driver, 10, ignored_exceptions=ignored_exceptions).until(
         expected_conditions.url_to_be("https://sis.umt.edu.vn/my-schedule"))
     
     logger.info(f"[{id}] Done fetching TOKEN")
+    driver.get_screenshot_as_file(f"out/{id}-c8.png")
 
     lcs = LocalStorage(driver)
     user = json.loads(lcs.get("sis-auth-react"))
