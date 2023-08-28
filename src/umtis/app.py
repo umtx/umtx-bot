@@ -155,9 +155,12 @@ def perfomance_login(user_profile, id):
     logger.info(f"[{id}] Click success. Soft clicked. Wait")
 
     driver.get_screenshot_as_file(f"out/{id}-c5.png")
-    my_elements = WebDriverWait(driver, 10).until(
-        expected_conditions.url_to_be("https://sis.umt.edu.vn/my-schedule"))
-    
+    try:
+        my_elements = WebDriverWait(driver, 10).until(expected_conditions.url_to_be("https://sis.umt.edu.vn/my-schedule"))
+    except Exception as e:
+        logger.error(f"[{id}] Login failed: {e}")
+        driver.close()
+        return {"error": True, "msg": "UNKNOWN_ERROR", "error_detail": str(e)}
     logger.info(f"[{id}] Done fetching token")
     driver.get_screenshot_as_file(f"out/{id}-c8.png")
 
