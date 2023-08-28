@@ -4,6 +4,7 @@ import time
 import os
 import random
 import undetected_chromedriver as uc
+import requests
 
 from seleniumwire import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -152,11 +153,11 @@ def perfomance_login(user_profile, id):
     WebDriverWait(driver, 20).until(expected_conditions.url_contains("https://www.office.com/?auth=2"))
 
     
-    driver.get('https://sis.umt.edu.vn/login')
+    cons = requests.get("https://apisis.umt.edu.vn/api/v1.0/auth2/authorize?role=STUDENT")
+    t = cons.text.replace('user.read%20offline_access%20openid%20profile','openid')
     
-    click_button_xpath(driver, "//span[@class='menu-icon d-block']", id)
-    sleep_and_wait(0.3)
-    WebDriverWait(driver, 20).until(expected_conditions.url_contains("microsoftonline.com"))
+    driver.get(t)
+    
 
     element = find_exist_xpath(driver, f"//div[@class='table'][@tabindex='0'][@role='button'][@data-test-id='{user_profile['username']}']")
     if (element == 0):
