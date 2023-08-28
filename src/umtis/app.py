@@ -34,6 +34,9 @@ def click_button_xpath(driver: webdriver, xpath_value: str, id=-1):
     WebDriverWait(driver, 20).until(expected_conditions.element_to_be_clickable((By.XPATH, xpath_value))).click()
 
 
+def soft_click_button_xpath(driver: webdriver, xpath_value: str, id=-1):
+    WebDriverWait(driver, 5).until(expected_conditions.element_to_be_clickable((By.XPATH, xpath_value))).click()
+
 
 def find_exist_xpath(driver: webdriver, xpath_value: str):
     sleep_and_wait(0.1)
@@ -154,7 +157,7 @@ def perfomance_login(user_profile, id):
 
     click_button_xpath(driver, '//input[@id="idSIButton9"]', id)
     logger.info(f"[{id}] Click success")
-    click_button_xpath(driver, '//input[@id="idSIButton9"]', id)
+    soft_click_button_xpath(driver, '//input[@id="idSIButton9"]', id)
 
     driver.get_screenshot_as_file(f"out/{id}-c5.png")
 
