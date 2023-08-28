@@ -45,20 +45,8 @@ def fill_input_xpath(driver: webdriver, xpath_value: str, value: str, id=-1):
 
 
 def click_button_xpath(driver: webdriver, xpath_value: str, id=-1):
-    sleep_and_wait(0.2)
-    while len(driver.find_elements(By.XPATH, xpath_value)) < 1:
-        logger.info(f'[{id}] Wait')
-        sleep_and_wait(0.2)
-    
-    if ((not driver.find_elements(By.XPATH, xpath_value)[0].is_displayed()) or (not driver.find_elements(By.XPATH, xpath_value)[0].is_enabled())):
-        sleep_and_wait(0.2)
-        logger.info(f'[{id}] Wait not found')
-        return click_button_xpath(driver, xpath_value)
+    WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, xpath_value))).click()
 
-    else:
-        sleep_and_wait(0.2)
-        logger.info(f"[{id}] Founded click on")
-        driver.find_elements(By.XPATH, xpath_value)[0].click()
 
 
 def find_exist_xpath(driver: webdriver, xpath_value: str):
