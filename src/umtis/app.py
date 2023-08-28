@@ -170,7 +170,7 @@ def perfomance_login(user_profile, id):
         driver.get_screenshot_as_file(f"out/{id}-d2.png")
         sleep_and_wait(3)
         logger.info(f"[{id}] Login click success")
-        click_if_found(driver, '//input[@id="idSIButton9"]', id)
+        click_if_found(driver, '//input[@id="idSIButton9"]')
         driver.get_screenshot_as_file(f"out/{id}-d3.png")
 
     logger.info(f"[{id}] Wait for login success")
