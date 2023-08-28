@@ -65,6 +65,11 @@ def ping():
 def perfomance_login(user_profile, id):
     options = uc.ChromeOptions()
 
+    local_state = {
+        "dns_over_https.mode": "secure",
+    #   "dns_over_https.templates": "https://dns.google/dns-query{?dns}",
+        "dns_over_https.templates": "https://chrome.cloudflare-dns.com/dns-query",
+    }
     prefs = {"profile.password_manager_enabled": False, "credentials_enable_service": False, "useAutomationExtension": False}
     options.add_experimental_option("prefs", prefs)
     options.add_argument('-no-first-run')
@@ -89,6 +94,8 @@ def perfomance_login(user_profile, id):
     options.add_argument("--incognito")
 
     options.add_argument("--disable-blink-features=AutomationControlled")
+    options.add_experimental_option('localState', local_state)
+
     options.page_load_strategy = "none"
     logger.info(f"[{id}] Fire up")
     driver = uc.Chrome(options=options, headless=True, seleniumwire_options={
