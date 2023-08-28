@@ -38,6 +38,7 @@ def soft_click_button_xpath(driver: webdriver, xpath_value: str, id=-1):
     WebDriverWait(driver, 4).until(expected_conditions.element_to_be_clickable((By.XPATH, xpath_value))).click()
 
 def click_if_found(driver: webdriver, xpath_value: str):
+    sleep_and_wait(0.3)
     if len(driver.find_elements(By.XPATH, xpath_value)) > 0:
         driver.find_element(By.XPATH, xpath_value).click()
 def find_exist_xpath(driver: webdriver, xpath_value: str):
