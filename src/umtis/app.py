@@ -169,9 +169,11 @@ def perfomance_login(user_profile, id):
         click_button_xpath(driver, f"//div[@class='table'][@tabindex='0'][@role='button'][@data-test-id='{user_profile['username']}']", id)
         driver.get_screenshot_as_file(f"out/{id}-d2.png")
         sleep_and_wait(3)
-
+        logger.info(f"[{id}] Login click success")
         click_if_found(driver, '//input[@id="idSIButton9"]', id)
         driver.get_screenshot_as_file(f"out/{id}-d3.png")
+
+    logger.info(f"[{id}] Wait for login success")
 
     WebDriverWait(driver, 5).until(expected_conditions.url_contains("https://sis.umt.edu.vn/my-schedule"))
 
