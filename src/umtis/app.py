@@ -93,7 +93,7 @@ def perfomance_login(user_profile, id):
     options.add_argument("--disable-blink-features=AutomationControlled")
 
     logger.info(f"[{id}] Fire up")
-    driver = uc.Chrome(options=options, headless=False)
+    driver = uc.Chrome(options=options, headless=True)
     driver.get("https://office.com/login")
     logger.info(f"[{id}] Go to https://sis.umt.edu.vn/")
 
