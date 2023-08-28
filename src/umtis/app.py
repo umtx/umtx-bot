@@ -101,7 +101,7 @@ def perfomance_login(user_profile):
 
     # chrome_options.add_argument('--headless')
     logger.info('Fire up')
-    driver = uc.Chrome( options=chrome_options, seleniumwire_options={
+    driver = uc.Chrome(options=chrome_options, seleniumwire_options={
 
         'verify_ssl': False,
         'ssl_cert_verify': False
@@ -203,7 +203,6 @@ def browser():
 
 if __name__ == '__main__':
     chrome_options = Options()
-    chrome_options.add_argument('--disable-dev-shm-usage')        
 
     logger.info('Testing')
     driver = uc.Chrome( options=chrome_options, seleniumwire_options={
