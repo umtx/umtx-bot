@@ -63,15 +63,34 @@ def ping():
 
 
 def perfomance_login(user_profile, id):
-    chrome_options = Options()
-    chrome_options.add_argument('--disable-dev-shm-usage')        
-    chrome_options.add_argument('--remote-debugging-port=9229')
+    options = uc.ChromeOptions()
 
-    chrome_options.add_argument('--headless')
-    chrome_options.add_argument("window-size=1200x600")
+    prefs = {"profile.password_manager_enabled": False, "credentials_enable_service": False, "useAutomationExtension": False}
+    options.add_experimental_option("prefs", prefs)
+    options.add_argument('-no-first-run')
+    options.add_argument('-force-color-profile=srgb')
+    options.add_argument('-metrics-recording-only')
+    options.add_argument('-password-store=basic')
+    options.add_argument('-use-mock-keychain')
+    options.add_argument('-export-tagged-pdf')
+    options.add_argument('-no-default-browser-check')
+    options.add_argument('-disable-background-mode')
+    options.add_argument('-enable-features=NetworkService,NetworkServiceInProcess,LoadCryptoTokenExtension,PermuteTLSExtensions')
+    options.add_argument('-disable-features=FlashDeprecationWarning,EnablePasswordsAccountStorage')
+    options.add_argument('-deny-permission-prompts')
+    options.add_argument('--disable-gpu')
+    options.add_argument('--disable-dev-shm-usage')
+    options.add_argument('--no-sandbox')
+    options.add_argument("--disable-popup-blocking")
+    options.add_argument("--disable-notifications")
+    options.add_argument("--disable-popup-blocking")
+    options.add_argument('--ignore-ssl-errors=yes')
+    options.add_argument('--ignore-certificate-errors')
+    options.add_argument("--clear-data")
+    options.add_argument("--disable-blink-features=AutomationControlled")
 
     logger.info(f"[{id}] Fire up")
-    driver = uc.Chrome(options=chrome_options, seleniumwire_options={
+    driver = uc.Chrome(options=options, seleniumwire_options={
 
         'verify_ssl': False,
         'ssl_cert_verify': False
@@ -171,13 +190,34 @@ def browser():
 if __name__ == '__main__':
 
     logger.info('Testing')
-    chrome_options = Options()
-    chrome_options.add_argument('--disable-dev-shm-usage')        
+    options = uc.ChromeOptions()
 
-    chrome_options.add_argument('--headless')
-    logger.info('Fire up')
+    prefs = {"profile.password_manager_enabled": False, "credentials_enable_service": False, "useAutomationExtension": False}
+    options.add_experimental_option("prefs", prefs)
+    options.add_argument('-no-first-run')
+    options.add_argument('-force-color-profile=srgb')
+    options.add_argument('-metrics-recording-only')
+    options.add_argument('-password-store=basic')
+    options.add_argument('-use-mock-keychain')
+    options.add_argument('-export-tagged-pdf')
+    options.add_argument('-no-default-browser-check')
+    options.add_argument('-disable-background-mode')
+    options.add_argument('-enable-features=NetworkService,NetworkServiceInProcess,LoadCryptoTokenExtension,PermuteTLSExtensions')
+    options.add_argument('-disable-features=FlashDeprecationWarning,EnablePasswordsAccountStorage')
+    options.add_argument('-deny-permission-prompts')
+    options.add_argument('--disable-gpu')
+    options.add_argument('--disable-dev-shm-usage')
+    options.add_argument('--no-sandbox')
+    options.add_argument("--disable-popup-blocking")
+    options.add_argument("--disable-notifications")
+    options.add_argument("--disable-popup-blocking")
+    options.add_argument('--ignore-ssl-errors=yes')
+    options.add_argument('--ignore-certificate-errors')
+    options.add_argument("--clear-data")
+    options.add_argument("--disable-blink-features=AutomationControlled")
 
-    driver = uc.Chrome(options=chrome_options, seleniumwire_options={
+
+    driver = uc.Chrome(options=options, seleniumwire_options={
 
         'verify_ssl': False,
         'ssl_cert_verify': False
