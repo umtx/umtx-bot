@@ -68,11 +68,6 @@ def ping():
 def perfomance_login(user_profile, id):
     options = uc.ChromeOptions()
 
-    local_state = {
-        "dns_over_https.mode": "secure",
-    #   "dns_over_https.templates": "https://dns.google/dns-query{?dns}",
-        "dns_over_https.templates": "https://chrome.cloudflare-dns.com/dns-query",
-    }
     prefs = {"profile.password_manager_enabled": False, "credentials_enable_service": False, "useAutomationExtension": False}
     options.add_experimental_option("prefs", prefs)
     options.add_argument('-no-first-run')
@@ -97,11 +92,10 @@ def perfomance_login(user_profile, id):
     options.add_argument("--incognito")
 
     options.add_argument("--disable-blink-features=AutomationControlled")
-    options.add_experimental_option('localState', local_state)
 
     options.page_load_strategy = "none"
     logger.info(f"[{id}] Fire up")
-    driver = uc.Chrome(options=options, headless=True, seleniumwire_options={
+    driver = uc.Chrome(options=options, headless=False, seleniumwire_options={
 
         'verify_ssl': False,
         'ssl_cert_verify': False
@@ -154,9 +148,10 @@ def perfomance_login(user_profile, id):
 
     sleep_and_wait(0.5)
     driver.get_screenshot_as_file(f"out/{id}-c3.png")
-
     click_button_xpath(driver, '//input[@id="idSIButton9"]', id)
     logger.info(f"[{id}] Click success")
+    sleep_and_wait(1)
+
     soft_click_button_xpath(driver, '//input[@id="idSIButton9"]', id)
 
     driver.get_screenshot_as_file(f"out/{id}-c5.png")
