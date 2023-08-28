@@ -97,6 +97,7 @@ def ping():
 def perfomance_login(user_profile):
     chrome_options = Options()
     chrome_options.add_argument('--disable-dev-shm-usage')        
+    chrome_options.add_argument('--remote-debugging-port=4444')
 
     # chrome_options.add_argument('--headless')
     logger.info('Fire up')
