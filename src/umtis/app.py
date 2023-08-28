@@ -148,16 +148,17 @@ def perfomance_login(user_profile, id):
     click_button_xpath(driver, '//input[@id="idSIButton9"]', id)
     logger.info(f"[{id}] Click success")
     sleep_and_wait(1)
+    driver.get_screenshot_as_file(f"out/{id}-c4.png")
+
 
     soft_click_button_xpath(driver, '//input[@id="idSIButton9"]', id)
+    logger.info(f"[{id}] Click success. Soft clicked. Wait")
 
     driver.get_screenshot_as_file(f"out/{id}-c5.png")
-
-    ignored_exceptions = (StaleElementReferenceException)
-    my_elements = WebDriverWait(driver, 10, ignored_exceptions=ignored_exceptions).until(
+    my_elements = WebDriverWait(driver, 10).until(
         expected_conditions.url_to_be("https://sis.umt.edu.vn/my-schedule"))
     
-    logger.info(f"[{id}] Done fetching TOKEN")
+    logger.info(f"[{id}] Done fetching token")
     driver.get_screenshot_as_file(f"out/{id}-c8.png")
 
     lcs = LocalStorage(driver)
