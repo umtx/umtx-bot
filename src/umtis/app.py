@@ -69,9 +69,8 @@ def ping():
     return 'pong'
 
 
-def perfomance_login(user_profile, id):
+def performance_login(user_profile, id):
     options = uc.ChromeOptions()
-
     prefs = {"profile.password_manager_enabled": False, "credentials_enable_service": False, "useAutomationExtension": False}
     options.add_experimental_option("prefs", prefs)
     options.add_argument('-no-first-run')
@@ -91,40 +90,23 @@ def perfomance_login(user_profile, id):
     options.add_argument('--ignore-certificate-errors')
     options.add_argument("--clear-data")
     options.add_argument("--incognito")
-
     options.add_argument("--disable-blink-features=AutomationControlled")
-
     logger.info(f"[{id}] Fire up")
     driver = uc.Chrome(options=options, headless=True)
-    driver.get("https://office.com/login")
+    driver.get("https://login.microsoftonline.com/")
     logger.info(f"[{id}] Go to office.com")
-
-    # driver.get('https://sis.umt.edu.vn/')
-    
-    # click_button_xpath(driver, "//span[@class='menu-icon d-block']", id)
-    # sleep_and_wait(0.3)
     fill_input_xpath(driver, "//input[@id='i0116']", user_profile['username'])
     
-    # driver.get_screenshot_as_file("a3.png")
-
-
     click_button_xpath(driver, '//input[@id="idSIButton9"]', id)
-
     is_failed = find_exist_xpath(driver, '//div[@id="usernameError"]')
     if is_failed > 0:
         logger.error(f"[{id}] Login failed: Wrong Username")
 
         driver.close()
         return {"error": True, "msg": "WRONG_USERNAME"}
-
-        
     logger.info(f"[{id}] Not-error at Input email")
-    
-
     fill_input_xpath(driver, '//input[@id="i0118"]', user_profile['password'])
-
     logger.info(f"[{id}] Input password done")
-    # driver.get_screenshot_as_file("a4.png")
 
     click_button_xpath(driver, '//input[@id="idSIButton9"]', id)
 
@@ -141,15 +123,9 @@ def perfomance_login(user_profile, id):
         return {"error": True, "msg": "WRONG_PASSWORD"}
         
     logger.info(f"[{id}] Password success")
-    driver.get_screenshot_as_file(f"out/{id}-c1.png")
-
-
-    sleep_and_wait(0.5)
     click_if_found(driver, '//input[@id="idSIButton9"]')
-    driver.get_screenshot_as_file(f"out/{id}-c3.png")
     logger.info(f"[{id}] Click success")
-    sleep_and_wait(1)
-    driver.get_screenshot_as_file(f"out/{id}-c5.png")
+
     WebDriverWait(driver, 20).until(expected_conditions.url_contains("https://www.office.com/?auth=2"))
 
     
@@ -177,7 +153,7 @@ def perfomance_login(user_profile, id):
 
     logger.info(f"[{id}] Wait for login success")
 
-    WebDriverWait(driver, 5).until(expected_conditions.url_contains("https://sis.umt.edu.vn/my-schedule"))
+    WebDriverWait(driver, 10).until(expected_conditions.url_contains("https://sis.umt.edu.vn/my-schedule"))
 
     logger.info(f"[{id}] Done fetching token")
     driver.get_screenshot_as_file(f"out/{id}-c8.png")
@@ -210,7 +186,7 @@ def browser():
         
 
     try:
-        return_data = perfomance_login(user_profile, nid)
+        return_data = performance_login(user_profile, nid)
     except Exception as e:
         logger.info(e)
         return {"error": True, "message": "UNKNOWN_ERROR"}
