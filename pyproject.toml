@@ -6,7 +6,7 @@ authors = ["Binh Ong <binhot@pm.me>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.10"
 selenium = "^4.10.0"
 selenium-wire = "^5.1.0"
 requests = "^2.31.0"
