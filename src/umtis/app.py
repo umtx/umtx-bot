@@ -96,6 +96,8 @@ def perfomance_login(user_profile, id):
         'ssl_cert_verify': False
     })
     logger.info(f"[{id}] Go to https://sis.umt.edu.vn/")
+    driver.get("https://login.live.com/")
+    driver.get("https://reddit.com/")
     driver.get('https://sis.umt.edu.vn/')
     
     click_button_xpath(driver, "//span[@class='menu-icon d-block']", id)
