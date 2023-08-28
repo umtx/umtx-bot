@@ -25,27 +25,13 @@ logger = log.setup_logging("SIS")
 app = Flask(__name__)
 
 
-def fill_input_xpath(driver: webdriver, xpath_value: str, value: str, id=-1):
-    sleep_and_wait(0.2)
-    while len(driver.find_elements(By.XPATH, xpath_value)) < 1:
-        logger.info(f'[{id}] Wait')
+def fill_input_xpath(driver: webdriver, xpath_value: str, value: str, ):
+    WebDriverWait(driver, 20).until(expected_conditions.element_to_be_clickable((By.XPATH, xpath_value))).send_keys(value)
 
-        sleep_and_wait(0.2)
-    if ((not driver.find_elements(By.XPATH, xpath_value)[0].is_displayed()) or (not driver.find_elements(By.XPATH, xpath_value)[0].is_enabled())):
-        sleep_and_wait(0.2)
-        logger.info(f"[{id}] Founded! Fill on")
-
-        return fill_input_xpath(driver, xpath_value, value)
-
-    else:
-        sleep_and_wait(0.1)
-        logger.info(f'[{id}] Wait not found')
-
-        driver.find_elements(By.XPATH, xpath_value)[0].send_keys(value)
 
 
 def click_button_xpath(driver: webdriver, xpath_value: str, id=-1):
-    WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, xpath_value))).click()
+    WebDriverWait(driver, 20).until(expected_conditions.element_to_be_clickable((By.XPATH, xpath_value))).click()
 
 
 
@@ -82,6 +68,8 @@ def perfomance_login(user_profile, id):
     chrome_options.add_argument('--remote-debugging-port=9229')
 
     chrome_options.add_argument('--headless')
+    chrome_options.add_argument("window-size=1200x600")
+
     logger.info(f"[{id}] Fire up")
     driver = uc.Chrome(options=chrome_options, seleniumwire_options={
 
