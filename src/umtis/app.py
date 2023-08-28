@@ -89,7 +89,7 @@ def perfomance_login(user_profile, id):
     options.add_argument("--incognito")
 
     options.add_argument("--disable-blink-features=AutomationControlled")
-    options.setPageLoadStrategy(PageLoadStrategy.NONE);
+    options.page_load_strategy = "NONE"
     logger.info(f"[{id}] Fire up")
     driver = uc.Chrome(options=options, headless=True, seleniumwire_options={
 
@@ -221,7 +221,7 @@ if __name__ == '__main__':
     options.add_argument("--incognito")
     options.add_argument("--disable-blink-features=AutomationControlled")
 
-    options.setPageLoadStrategy(PageLoadStrategy.NONE);
+    options.page_load_strategy = "NONE"
 
     driver = uc.Chrome(options=options,headless=True, seleniumwire_options={
 
