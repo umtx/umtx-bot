@@ -168,6 +168,7 @@ def perfomance_login(user_profile, id):
 
         click_button_xpath(driver, f"//div[@class='table'][@tabindex='0'][@role='button'][@data-test-id='{user_profile['username']}']", id)
         driver.get_screenshot_as_file(f"out/{id}-d2.png")
+        sleep_and_wait(3)
 
         click_button_xpath(driver, '//input[@id="idSIButton9"]', id)
         driver.get_screenshot_as_file(f"out/{id}-d3.png")
