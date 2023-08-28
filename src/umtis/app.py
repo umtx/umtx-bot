@@ -148,12 +148,13 @@ def performance_login(user_profile, id):
         driver.get_screenshot_as_file(f"out/{id}-d2.png")
         sleep_and_wait(3)
         logger.info(f"[{id}] Login click success")
+        
         click_if_found(driver, '//input[@id="idSIButton9"]')
         driver.get_screenshot_as_file(f"out/{id}-d3.png")
 
     logger.info(f"[{id}] Wait for login success")
 
-    WebDriverWait(driver, 10).until(expected_conditions.url_contains("https://sis.umt.edu.vn/my-schedule"))
+    WebDriverWait(driver, 50).until(expected_conditions.url_contains("https://sis.umt.edu.vn/my-schedule"))
 
     logger.info(f"[{id}] Done fetching token")
     driver.get_screenshot_as_file(f"out/{id}-c8.png")
