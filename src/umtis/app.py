@@ -90,7 +90,7 @@ def perfomance_login(user_profile, id):
     options.add_argument("--disable-blink-features=AutomationControlled")
 
     logger.info(f"[{id}] Fire up")
-    driver = uc.Chrome(options=options, seleniumwire_options={
+    driver = uc.Chrome(options=options, headless=True, seleniumwire_options={
 
         'verify_ssl': False,
         'ssl_cert_verify': False
@@ -217,7 +217,7 @@ if __name__ == '__main__':
     options.add_argument("--disable-blink-features=AutomationControlled")
 
 
-    driver = uc.Chrome(options=options, seleniumwire_options={
+    driver = uc.Chrome(options=options,headless=True, seleniumwire_options={
 
         'verify_ssl': False,
         'ssl_cert_verify': False
