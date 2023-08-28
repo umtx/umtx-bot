@@ -140,9 +140,11 @@ def perfomance_login(user_profile, id):
         return {"error": True, "msg": "WRONG_PASSWORD"}
         
     logger.info(f"[{id}] Password success")
+    driver.get_screenshot_as_file(f"out/{id}-cs.png")
 
     sleep_and_wait(0.5)
-    
+    driver.get_screenshot_as_file(f"out/{id}-c3.png")
+
     click_button_xpath(driver, '//input[@id="idSIButton9"]', id)
     logger.info(f"[{id}] Click success")
 
