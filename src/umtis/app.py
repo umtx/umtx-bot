@@ -95,7 +95,7 @@ def perfomance_login(user_profile, id):
     logger.info(f"[{id}] Fire up")
     driver = uc.Chrome(options=options, headless=True)
     driver.get("https://office.com/login")
-    logger.info(f"[{id}] Go to https://sis.umt.edu.vn/")
+    logger.info(f"[{id}] Go to office.com")
 
     # driver.get('https://sis.umt.edu.vn/')
     
@@ -164,8 +164,14 @@ def perfomance_login(user_profile, id):
         return {"error": True, "msg": "UNKNOWN_ERROR"}
     else:
         logger.info(f"[{id}] Login click")
+        driver.get_screenshot_as_file(f"out/{id}-d1.png")
+
         click_button_xpath(driver, f"//div[@class='table'][@tabindex='0'][@role='button'][@data-test-id='{user_profile['username']}']", id)
+        driver.get_screenshot_as_file(f"out/{id}-d2.png")
+
         click_button_xpath(driver, '//input[@id="idSIButton9"]', id)
+        driver.get_screenshot_as_file(f"out/{id}-d3.png")
+
     WebDriverWait(driver, 5).until(expected_conditions.url_contains("https://sis.umt.edu.vn/my-schedule"))
 
     logger.info(f"[{id}] Done fetching token")
