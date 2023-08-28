@@ -154,6 +154,8 @@ def perfomance_login(user_profile, id):
 
     click_button_xpath(driver, '//input[@id="idSIButton9"]', id)
     logger.info(f"[{id}] Click success")
+    click_button_xpath(driver, '//input[@id="idSIButton9"]', id)
+
     driver.get_screenshot_as_file(f"out/{id}-c5.png")
 
     ignored_exceptions = (StaleElementReferenceException)
